@@ -1,12 +1,14 @@
+var activationsNames = ["Sigmoid", "Identity", "Step", "Tanh", "ReLu"]; //Used in the svg drawing
+
 //The Node Class
 //This is where math appends
 class Node {
-	constructor(num, lay) {
+	constructor(num, lay, isOutput) {
 		this.number = num;
 		this.layer = lay;
 		this.activationFunction = Math.floor(Math.random() * 5); //Number between 0 and 4
 		this.bias = random(-1, 1);
-		this.output = false; //is this node an Output node?
+		this.output = isOutput || false; //is this node an Output node?
 
 		this.inputSum = 0;
 		this.outputValue = 0;
@@ -57,10 +59,9 @@ class Node {
 	}
 
 	clone() { //Returns a copy of this node
-		let node = new Node(this.number, this.layer);
+		let node = new Node(this.number, this.layer, this.output);
 		node.bias = this.bias; //Same bias
 		node.activationFunction = this.activationFunction; //Same activationFunction
-		node.output = this.output; //Same type
 		return node;
 	}
 
