@@ -2,9 +2,6 @@
 A JavaScript implementation of the Neat Algorithm. <br/>
 Genome Drawing done using D3.js
 
-# Disclaimer
-Totally not optimize! It's just me trying to get into NeuroEvolution Algorithms.
-
 # Examples
 #### Classification
 Using an evolutionary process we eventually get a network that can identify whenever a point is on one side or the other of the line.
