@@ -10,6 +10,7 @@ function setup() {
 	let canvas = createCanvas(600, 600);
 	canvas.parent('canvascontainer');
 	points = createP();
+	points.parent('leftDiv');
 
 	population1 = new Population(20, 0);
 	population2 = new Population(20, 1);

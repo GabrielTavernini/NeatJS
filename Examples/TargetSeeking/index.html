@@ -12,16 +12,25 @@
   <script src="./node.js"></script>
   <script src="./connection.js"></script>
   <script src="./genome.js"></script>
-
+  
+  <style>
+		.left {
+		  float: left;
+		  margin: 5px;
+		}
+	</style>
 </head>
 
 <body>
-	<div id="canvascontainer"></div>
-	<div>
-		Speed: <input id="speedSlider" type="range" min="0" max="50" value="1"> <span id="speed">1</span>
-		<br/>
-		Moving Target: <input id="moveCheckbox" type="checkbox" checked>
+	<div id="leftDiv" class="left">
+		<div id="canvascontainer"></div>
+		<div>
+			Speed: <input id="speedSlider" type="range" min="0" max="50" value="1"> <span id="speed">1</span>
+			<br/>
+			Moving Target: <input id="moveCheckbox" type="checkbox" checked>
+		</div>
 	</div>
+	
     <div id="svgContainer"></div>
 </body>
 </html>

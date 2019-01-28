@@ -11,13 +11,24 @@
 		<script src="connection.js"></script>
 		<script src="genome.js"></script>
 		<script src="sketch.js"></script>
+
+		<style>
+			.left {
+			  float: left;
+			  margin: 5px;
+			}
+		</style>
+
 	</head>
 
 	<body>
-		<div id="canvascontainer"></div>
-		<div>
-			Speed: <input id="speedSlider" type="range" min="0" max="30" value="1"> <span id="speed">1</span>
+		<div class="left">
+			<div id="canvascontainer"></div>
+			<div>
+				Speed: <input id="speedSlider" type="range" min="0" max="30" value="1"> <span id="speed">1</span>
+			</div>
 		</div>
+		
 		<div id="svgContainer"></div>
 	</body>
 </html>
