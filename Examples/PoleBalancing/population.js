@@ -36,7 +36,7 @@ class Population{
 
 			counter++;
 
-			if(counter == 7)
+			if(counter == 9)
 				counter = 1;
 		}
 	}

@@ -3,7 +3,7 @@ var canvas;
 var maxLifespan = 400;
 
 function setup() {
-	population = new Population(6);
+	population = new Population(8);
 }
 
 function draw() {
