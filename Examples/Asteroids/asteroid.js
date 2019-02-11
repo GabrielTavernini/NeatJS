@@ -1,7 +1,14 @@
 class asteroid{
-	constructor(pos, radius){
-		this.vel = p5.Vector.random2D();
+	constructor(pos, radius, angle){
 		this.vertexN = random(8,15);
+
+		if(angle && (Math.random() < 0.5)) {
+			let tempAngle = angle + (Math.random() - 0.5);
+			this.vel = createVector(Math.cos(tempAngle), Math.sin(tempAngle))
+		} else {
+			this.vel = p5.Vector.random2D();
+		}
+
 
 		if(pos)	{
 			this.pos = pos.copy();

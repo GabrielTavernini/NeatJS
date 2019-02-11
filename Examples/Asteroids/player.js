@@ -1,5 +1,7 @@
 var maxScore = 0;
 var MAX_SPEED = 5;
+var asteroidsN = 5;
+var asteroidsDistance = 200;
 
 //The Player Class
 //The interface between our 
@@ -9,14 +11,22 @@ class Player{
 		this.brain = new Genome(genomeInputsN, genomeOutputN, id);
 		this.fitness;
 		
-		
 		this.color = color(random(0, 255), random(0, 255), random(0, 255));
 		this.radius = 7;
 		this.ship = new spaceShip();
 		this.projectiles = [];
 		this.asteroids = [];
-		for(let j = 0; j < 5; j++){
-			this.asteroids[j] = new asteroid();
+
+		let angle = 0;
+		for(let j = 0; j < asteroidsN; j++){
+			let tempAngle = angle + (Math.random() - 0.5);
+			let astPos = createVector(width/2 + Math.cos(tempAngle) * asteroidsDistance, height/2 + Math.sin(tempAngle) * asteroidsDistance);
+			let angleToShip = this.angleFromPoint(astPos.x, astPos.y);
+
+			text(angleToShip * 180 / Math.PI, astPos.x, astPos.y);
+			let ast = new asteroid(astPos, random(20,50), angleToShip);
+			this.asteroids[j] = ast;
+			angle += (Math.PI * 2) / asteroidsN;
 		}
 
 		this.score = 1;
@@ -45,8 +55,8 @@ class Player{
 
 
 	//Game stuff
-	look(){
-		this.vision = this.ship.look(this.asteroids);
+	look(show){
+		this.vision = this.ship.look(this.asteroids, show);
 	}
 
 	think(){
@@ -85,7 +95,7 @@ class Player{
 		
 			for(let i = this.projectiles.length - 1; i >= 0; i--){
 				this.projectiles[i].update();
-				if(this.projectiles[i].hitEdge()){
+				if(this.projectiles[i].timer > 40){
 					this.projectiles.splice(i,1);
 				}else{
 					for(let j = this.asteroids.length - 1; j >= 0; j--){
@@ -128,8 +138,17 @@ class Player{
 		this.fitness = (this.score)*10;
 		this.fitness *= this.lifespan;
 		this.fitness *= hitRate*hitRate;	
-		this.score = hitRate;
+		this.score = this.fitness;
 	}
 
+	angleFromPoint(x, y){
+		let d = dist(x, y, this.ship.pos.x, this.ship.pos.y);
+		let dx = (this.ship.pos.x-x) / d;
+		let dy = (this.ship.pos.y-y) / d;
 	
+		let a = Math.acos(dx);
+		a = dy < 0 ? 2 * Math.PI - a : a;
+		return a;
+	}
 }
+

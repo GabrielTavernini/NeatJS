@@ -3,14 +3,13 @@ let cycles = 1;
 let game;
 let first = 0;
 let x = 255;
-let maxLifespan = 500;
+let maxLifespan = 200;
 
 function setup() {
 	let canvas = createCanvas(600, 400);
 	canvas.parent('canvascontainer');
 
-	popu = new Population(25);
-	
+	popu = new Population(150);
 }
 
 function draw() {

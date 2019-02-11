@@ -1,5 +1,6 @@
 class projectile{
 	constructor(x, y, d){
+		this.timer = 0;
 		this.position = createVector(x ,y);
 		this.direction = d;
 		this.velocity = createVector(0,0);
@@ -8,7 +9,11 @@ class projectile{
 	}
 	
 	update(){
+		this.timer ++;
 		this.position.add(this.velocity);
+
+		this.position.x = this.position.x >= width  ? 0  : this.position.x <= 0 ? width : this.position.x;
+		this.position.y = this.position.y >= height ? 0 : this.position.y <= 0 ? height : this.position.y;
 	}
 
 	show(color){

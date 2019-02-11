@@ -2,8 +2,8 @@ let genomeInputsN = 16;
 let genomeOutputN = 4;
 let bestPlayer;
 let bestFitness = 0;
-let showBest = false;
-let showAll = true;
+let showBest = true;
+let showAll = false;
 
 //The Population Class
 //Here is where the power of all the classes

@@ -106,13 +106,16 @@ class spaceShip{
 			for(let i = 0; i < asteroids.length; i++){
 				let d = dist(position.x, position.y, asteroids[i].pos.x, asteroids[i].pos.y);
 				if(d <= asteroids[i].radius){
-					return map(distance, 0, 40, 0, 1);
+					return map(distance, 0, 40, 1, 0);
 				}
 			}
+			
 			position.add(direction);
+			position.x = position.x >= width  ? 0  : position.x <= 0 ? width : position.x;
+			position.y = position.y >= height ? 0 : position.y <= 0 ? height : position.y;
 			distance++;
 		}
 
-		return 1;
+		return 0;
 	}
 }
