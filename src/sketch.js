@@ -15,7 +15,7 @@ function setup() {
 	
 	//Generate and Draw points
 	for(let i = 0; i < 200; i++) {
-		let y = random(1), x = random(1);
+		let y = Math.random(), x = Math.random();
 		let type = y * height > myFunction(x * width) ? 1 : 0;
 		points.push({x: x, y: y, type: type});
 

@@ -7,7 +7,7 @@ class Node {
 		this.number = num;
 		this.layer = lay;
 		this.activationFunction = Math.floor(Math.random() * 5); //Number between 0 and 4
-		this.bias = random(-1, 1);
+		this.bias = Math.random() * 2 - 1;
 		this.output = isOutput || false; //is this node an Output node?
 
 		this.inputSum = 0;
@@ -27,9 +27,9 @@ class Node {
 	}
 
 	mutateBias() { //Randomly mutate the bias of this node
-		let rand = random(1);
+		let rand = Math.random();
 		if (rand < 0.05) //5% chance of being assigned a new random value
-			this.bias = random(-1, 1);
+			this.bias = Math.random() * 2 - 1;
 		else //95% chance of being uniformly perturbed
 			this.bias += randomGaussian() / 50;
 	}
@@ -68,7 +68,7 @@ class Node {
 	activation(x) { //All the possible activation Functions
 		switch (this.activationFunction) {
 			case 0: //Sigmoid
-				return 1 / (1 + pow(Math.E, -4.9 * x));
+				return 1 / (1 + Math.pow(Math.E, -4.9 * x));
 				break;
 			case 1: //Identity
 				return x;
@@ -83,7 +83,7 @@ class Node {
 				return x < 0 ? 0 : x;
 				break;
 			default: //Sigmoid
-				return 1 / (1 + pow(Math.E, -4.9 * x));
+				return 1 / (1 + Math.pow(Math.E, -4.9 * x));
 				break;
 		}
 	}

@@ -115,7 +115,7 @@ class Population{
 	}
 
 	selectPlayer(){
-		let rand = Math.floor(random(0, this.matingPool.length));
+		let rand = Math.floor(Math.random() *  this.matingPool.length);
 		return this.population[this.matingPool[rand]];
 	}
 

@@ -10,9 +10,9 @@ class Connection {
 	}
 
 	mutateWeight(){ //Randomly mutate the weight of this connection
-		let rand = random();
+		let rand = Math.random();
 		if (rand < 0.05) //5% chance of being assigned a new random value
-			this.weight = random(-1, 1);
+			this.weight = Math.random() * 2 - 1;
 		else //95% chance of being uniformly perturbed
 			this.weight += randomGaussian() / 50;
 	}
