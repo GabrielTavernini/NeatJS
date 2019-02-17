@@ -399,5 +399,8 @@ class Genome {
 
 			node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 		});
+
+		var element = document.getElementById(this.id);
+		document.getElementById("svgContainer").append(element);
 	}
 }

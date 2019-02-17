@@ -99,5 +99,3 @@ class Population{
 		return avSum / this.population.length;
 	}
 }
-
-

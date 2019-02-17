@@ -25,9 +25,9 @@ textureWalls.wrapS = THREE.RepeatWrapping;
 textureWalls.wrapT = THREE.RepeatWrapping;
 textureWalls.repeat.set( 4, 4 );
 
-var width = window.innerWidth - 50;//800;
-var height = window.innerHeight - 50;//800;
-var groundWidth = 400;
+var width = 800;//800;
+var height = 700;//800;
+var groundWidth = 800;
 var groundHeight = 200;
 
 var gravity					= -290;
@@ -45,8 +45,12 @@ var body_mass				= 2000;
 var population = new Population(20);
 var vision = [];
 var playerCounter = 0;
-var currentLifespan = 0;
+var deltaLifespan = 0;
 var maxLifespan = 200;
+var prevPosition = [];
+var mediumVelocity = 0;
+var sumCounter = 0;
+var velocitySum = 0;
 
 initScene = function () {
 	// AmbientLight
@@ -57,14 +61,11 @@ initScene = function () {
 	car = new createCar();
 	car.rotation.order = "YXZ"
 
-	camera = new THREE.PerspectiveCamera(45, width/height, 1, 1000);
-	camera.position.set(0, 300, 0);
-	camera.lookAt(new THREE.Vector3(30, 0, -20));
-	scene.add(camera);
+	if(cameraFollow) {
+		camera.position.set(0, 300, 0);
+		camera.lookAt(new THREE.Vector3(30, 0, -20));
+	}
 
-	orbit = new THREE.OrbitControls(camera, renderer.domElement);
-	orbit.enableDamping = true;
-	orbit.dampingFactor = 1;
 
 	controls = new function () {
 		this.velocity = 0;
@@ -276,7 +277,15 @@ function createGround() {
 		{l: [175,150], r: [150,200]},
 		{l: [250,150], r: [285,200]},
 		{l: [310,50], r: [345,100]},
-		{l: [400,50], r: [400,100]},
+		{l: [400,50], r: [425,100]},
+		{l: [450,0], r: [475,50]},
+		{l: [550,0], r: [500,50]},
+		{l: [575,25], r: [500,50]},
+		{l: [520,150], r: [450,150]},
+		{l: [520,150], r: [470,200]},
+		{l: [600,150], r: [625,200]},
+		{l: [700,50], r: [725,85]},
+		{l: [800,50], r: [800,85]},
 	];
 
 
@@ -291,8 +300,6 @@ function createGround() {
 		mesh.position.x = (points[i].l[0] + points[i+1].l[0])/2 - groundWidth/2;
 		mesh.position.z = (points[i].l[1] + points[i+1].l[1])/2 - groundHeight/2;
 		mesh.position.y = 15;
-		b = b > 0 ? b : b;
-		a = a > 0 ? a*-1 : a;
 		mesh.rotation.y = Math.atan2(b, a);
 
 		ground.add(mesh);
@@ -306,8 +313,6 @@ function createGround() {
 		mesh2.position.x = (points[i].r[0] + points[i+1].r[0])/2 - groundWidth/2;
 		mesh2.position.z = (points[i].r[1] + points[i+1].r[1])/2 - groundHeight/2;
 		mesh2.position.y = 15;
-		b2 = b2 > 0 ? b2 : b2;
-		a2 = a2 > 0 ? a2*-1 : a2;
 		mesh2.rotation.y = Math.atan2(b2, a2);
 
 		ground.add(mesh2);
@@ -317,14 +322,30 @@ function createGround() {
 }
 
 function restart(crash = false) {
-	currentLifespan = 0;
+	sumCounter = 0;
+	velocitySum = 0;
+	prevPosition = [];
+	deltaLifespan = 0;
 	let score = Math.sqrt(Math.pow(car.position.x + groundWidth/2, 2) + Math.pow(car.position.z + groundHeight/2, 2));
 	population.population[playerCounter].score = score;
 	population.population[playerCounter].fitness = score;
 
-	if(crash) {
+	if(crash && document.getElementById("crashCheckbox").checked) {
 		population.population[playerCounter].score *= 0.75;
 		population.population[playerCounter].fitness *= 0.75;
+	}
+
+	if(document.getElementById("velocityCheckbox").checked) {
+		population.population[playerCounter].score *= mediumVelocity/20;
+		population.population[playerCounter].fitness *= mediumVelocity/20;
+	}
+
+
+	if(population.population[playerCounter].fitness > population.bestFitness){
+		population.bestFitness = population.population[playerCounter].fitness;
+		population.bestPlayer = population.population[playerCounter].clone();
+		population.bestPlayer.brain.id = "BestGenome";
+		population.bestPlayer.brain.draw();
 	}
 
 	console.log("Genome: " + playerCounter + " - Score: " + population.population[playerCounter].score);
@@ -349,6 +370,13 @@ function restart(crash = false) {
 };
 
 render = function () {
+	mediumVelocity = velocitySum / sumCounter;
+	document.getElementById("genomeN").innerHTML = playerCounter;
+    document.getElementById("generationN").innerHTML = population.generation;
+	document.getElementById("bestScore").innerHTML = population.bestFitness;
+    document.getElementById("mediumV").innerHTML = mediumVelocity;
+
+	cameraFollow = document.getElementById("followCheckbox").checked;
 	if(cameraFollow) {
 		camera.position.set(car.position.x + Math.sin(car.rotation.y - Math.PI/2)*75, 60, car.position.z + Math.cos(car.rotation.y - Math.PI/2)*75);
 		var pos = car.position.clone();
@@ -449,9 +477,13 @@ render = function () {
 	
 	decisions[0] *= 20;
 	controls.velocity = decisions[0] < 20 && decisions[0] > -20 ? -decisions[0] : decisions[0] < 0 ? 20 : -20;//-decisions[0]*10;
+	sumCounter ++;
+	velocitySum += -controls.velocity;
+	document.getElementById("currentV").innerHTML =  -controls.velocity;
 	controls.changeVelocity();
 
 	controls.wheelAngle = decisions[1] < .3 && decisions[1] > -.3 ? decisions[1] : decisions[1] < 0 ? -.3 : .3;
+	document.getElementById("currentS").innerHTML =  controls.wheelAngle;
 	controls.changeOrientation();
 
 	renderer.render(scene, camera);
@@ -460,10 +492,17 @@ render = function () {
 
 
 	//Overtime
-	currentLifespan ++;
-	if(currentLifespan > maxLifespan){
-		currentLifespan = 0;
-		restart();
+	if(prevPosition.length < 2)
+		prevPosition = [car.position.x, car.position.z];
+	else if(Math.sqrt(Math.pow(prevPosition[0] - car.position.x, 2) + Math.pow(prevPosition[1] - car.position.z, 2)) < 5) {
+		if(deltaLifespan > 75) {
+			deltaLifespan = 0;
+			restart();
+		}
+		deltaLifespan++;
+	} else {
+		deltaLifespan = 0;
+		prevPosition = [car.position.x, car.position.z];
 	}
 };
 
@@ -483,6 +522,13 @@ window.onload = () => {
 
 	scene = new Physijs.Scene({reportSize: 10, fixedTimeStep: 1 / 60});
 	scene.setGravity(new THREE.Vector3(0, gravity, 0));
+
+	camera = new THREE.PerspectiveCamera(45, width/height, 1, 1000);
+	scene.add(camera);
+
+	orbit = new THREE.OrbitControls(camera, renderer.domElement);
+	orbit.enableDamping = true;
+	orbit.dampingFactor = 1;
 
 	initScene();
 	render();
