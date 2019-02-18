@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 Physijs.scripts.worker	= 'libs/physijs_worker.js';
@@ -13,6 +11,26 @@ var raycaster = new THREE.Raycaster();
 raycaster.far = 75;
 raycaster.near = 5;
 var controls;
+
+//Path
+var points = [
+	{l: [0,0], r: [0,50]},
+	{l: [100,0], r: [75,50]},
+	{l: [150,50], r: [100,75]},
+	{l: [150,125], r: [100,150]},
+	{l: [175,150], r: [150,200]},
+	{l: [250,150], r: [285,200]},
+	{l: [310,50], r: [345,100]},
+	{l: [400,50], r: [425,100]},
+	{l: [450,0], r: [475,50]},
+	{l: [550,0], r: [500,50]},
+	{l: [575,25], r: [500,50]},
+	{l: [520,150], r: [450,150]},
+	{l: [520,150], r: [470,200]},
+	{l: [600,150], r: [625,200]},
+	{l: [700,50], r: [725,85]},
+	{l: [800,50], r: [800,85]},
+];
 
 var textureGround = new THREE.TextureLoader().load( "./img/asphalt.jpg" );
 var textureWalls = new THREE.TextureLoader().load( "./img/wireframe.png" );
@@ -269,25 +287,6 @@ function createGround() {
 	borderTop.position.z = -height / 2 - 1;
 	ground.add(borderTop);
 
-	var points = [
-		{l: [0,0], r: [0,50]},
-		{l: [100,0], r: [75,50]},
-		{l: [150,50], r: [100,75]},
-		{l: [150,125], r: [100,150]},
-		{l: [175,150], r: [150,200]},
-		{l: [250,150], r: [285,200]},
-		{l: [310,50], r: [345,100]},
-		{l: [400,50], r: [425,100]},
-		{l: [450,0], r: [475,50]},
-		{l: [550,0], r: [500,50]},
-		{l: [575,25], r: [500,50]},
-		{l: [520,150], r: [450,150]},
-		{l: [520,150], r: [470,200]},
-		{l: [600,150], r: [625,200]},
-		{l: [700,50], r: [725,85]},
-		{l: [800,50], r: [800,85]},
-	];
-
 
 
 	for(let i = 0; i < points.length -1; i++) {
@@ -322,11 +321,24 @@ function createGround() {
 }
 
 function restart(crash = false) {
-	sumCounter = 0;
-	velocitySum = 0;
-	prevPosition = [];
-	deltaLifespan = 0;
-	let score = Math.sqrt(Math.pow(car.position.x + groundWidth/2, 2) + Math.pow(car.position.z + groundHeight/2, 2));
+
+	let x = car.position.x + groundWidth/2;
+	let z = car.position.z + groundHeight/2;
+	let result = getClosestPointOnLines({x:x, y:z}, points);
+
+	let dist = 0;
+	for(let i = 1; i < result.i; i++) {
+		let segDist = Math.sqrt(Math.pow(points[i-1].l[0]-points[i].l[0], 2) + Math.pow(points[i-1].l[1]-points[i].l[1], 2));
+		segDist *= segDist < 0 ? -1 : 1;
+		dist += segDist;
+	}
+	
+	
+	let additionalDist = Math.sqrt(Math.pow(points[result.i - 1].l[0]-result.x, 2) + Math.pow(points[result.i - 1].l[1]-result.y, 2));
+	additionalDist *= additionalDist < 0 ? -1 : 1;
+	dist += additionalDist;
+
+	let score = dist;//Math.sqrt(Math.pow(car.position.x + groundWidth/2, 2) + Math.pow(car.position.z + groundHeight/2, 2));
 	population.population[playerCounter].score = score;
 	population.population[playerCounter].fitness = score;
 
@@ -336,8 +348,10 @@ function restart(crash = false) {
 	}
 
 	if(document.getElementById("velocityCheckbox").checked) {
-		population.population[playerCounter].score *= mediumVelocity/20;
-		population.population[playerCounter].fitness *= mediumVelocity/20;
+		if(mediumVelocity > 0) {
+			population.population[playerCounter].score *= mediumVelocity/20;
+			population.population[playerCounter].fitness *= mediumVelocity/20;
+		}
 	}
 
 
@@ -348,6 +362,11 @@ function restart(crash = false) {
 		population.bestPlayer.brain.draw();
 	}
 
+
+	sumCounter = 0;
+	velocitySum = 0;
+	prevPosition = [];
+	deltaLifespan = 0;
 	console.log("Genome: " + playerCounter + " - Score: " + population.population[playerCounter].score);
 
 	playerCounter++;
