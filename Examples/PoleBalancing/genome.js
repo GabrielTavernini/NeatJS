@@ -78,21 +78,10 @@ class Genome {
 		let offSpring = new Genome(this.inputs, this.outputs, 0, true); //Child genome
 		offSpring.nextNode = this.nextNode; 
 
-		//Randomly take nodes from this or the partner network
-		for(let i = 0; i < offSpring.nextNode; i++){
-			let rand = Math.random();
-			let node; 
-			if(rand > 0.5){
-				let index = this.getNode(i);
-				node = this.nodes[index].clone();
-			} else {
-				let index = partner.getNode(i);
-				if(index != -1)
-					node = partner.nodes[index].clone();
-				else
-					node = this.nodes[this.getNode(i)].clone();	
-			}
-			node.layer = 0;
+
+		//Take all nodes from this parent
+		for(let i = 0; i < this.nodes.length; i++){
+			let node = this.nodes[i].clone();
 			offSpring.nodes.push(node);
 		}
 		
@@ -107,14 +96,6 @@ class Genome {
 				//Reassign nodes
 				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
 				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
-				
-				//Calculate new layers for each node
-				if(fromNode.layer >= toNode.layer) 
-					toNode.layer++;
-				
-				if(toNode.layer > maxLayer)
-					maxLayer = toNode.layer;
-				
 				conn.fromNode = fromNode;
 				conn.toNode = toNode;
 
@@ -128,14 +109,6 @@ class Genome {
 				//Reassign nodes
 				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
 				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
-				
-				//Calculate new layers for each node
-				if(fromNode.layer >= toNode.layer) 
-					toNode.layer++;			
-
-				if(toNode.layer > maxLayer)
-					maxLayer = toNode.layer;
-
 				conn.fromNode = fromNode;
 				conn.toNode = toNode;
 
@@ -145,7 +118,7 @@ class Genome {
 			}
 		}
 
-		offSpring.layers = maxLayer + 1; //Number of layers
+		offSpring.layers = this.layers;
 		return offSpring;
 	}
 	
@@ -159,21 +132,27 @@ class Genome {
 		if(Math.random() < 0.8) { //80%
 			//MOD Connections
 			mut = "ModConn";
-			let i = Math.floor(Math.random() * this.connections.length);
-			this.connections[i].mutateWeight();
+			//let i = Math.floor(Math.random() * this.connections.length);
+			//this.connections[i].mutateWeight();
+			for (var i = 0; i < this.connections.length; i++) {
+				this.connections[i].mutateWeight();
+			}
 		}
 
 		if(Math.random() < 0.5) { //50%
 			//MOD Bias
 			mut = "ModBias";
-			let i = Math.floor(Math.random() * this.nodes.length - this.inputs) + this.inputs;
-			this.nodes[i].mutateBias();
+			//let i = Math.floor(Math.random() * this.nodes.length);
+			//this.nodes[i].mutateBias();
+			for (var i = 0; i < this.nodes.length; i++) {
+				this.nodes[i].mutateBias();
+			}
 		}
 
 		if(Math.random() < 0.1) { //10%
 			//MOD Node
 			mut = "ModAct";
-			let i = Math.floor(Math.random() * this.nodes.length - this.inputs) + this.inputs;
+			let i = Math.floor(Math.random() * this.nodes.length);
 			this.nodes[i].mutateActivation();
 		}
 
@@ -324,7 +303,7 @@ class Genome {
 			element.parentNode.removeChild(element);
 
 		var width = 400,
-			height = 400
+			height = 400;
 
 		var svg = d3.select("body").append("svg")
 			.attr("width", width)
@@ -339,12 +318,12 @@ class Genome {
 			.size([width, height]);
 
 
-		var connections = [];
-		for (let i = 0; i < this.connections.length; i++) {
-			connections.push({ source: this.connections[i].fromNode.number, target: this.connections[i].toNode.number, weight: this.connections[i].weight, enabled: this.connections[i].enabled });
-		}
+		let connections = [];
+		this.connections.forEach(conn => {
+			connections.push({ source: conn.fromNode.number, target: conn.toNode.number, weight: conn.weight, enabled: conn.enabled });
+		});
 
-		var nodes = [];
+		let nodes = [];
 		this.nodes.forEach(originalNode => {
 			let node = originalNode.clone();
 			if(node.layer == 0) {
