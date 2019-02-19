@@ -8,14 +8,14 @@ let bestFitness = 0;
 //Here is where the power of all the classes
 //comes together to destroy the game score records
 class Population{
-	constructor(size, squad){
+	constructor(size){
 		this.population = [];
 
 		this.generation = 0;
 		this.matingPool = [];
 
 		for(let i = 0; i < size; i++){
-			this.population.push(new Player(squad));
+			this.population.push(new Player());
 			this.population[i].brain.generateNetwork();
 			this.population[i].brain.mutate();
 		}

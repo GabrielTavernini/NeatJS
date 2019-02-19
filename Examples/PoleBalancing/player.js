@@ -5,7 +5,7 @@ var counter = 1;
 //The interface between our 
 //NeuralNetwork and the game 
 class Player{
-	constructor(squad){
+	constructor(){
 		this.brain = new Genome(genomeInputsN, genomeOutputN);
 		this.fitness;
 		this.score = 1;
