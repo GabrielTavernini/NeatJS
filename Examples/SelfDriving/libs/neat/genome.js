@@ -79,9 +79,16 @@ class Genome {
 		offSpring.nextNode = this.nextNode; 
 
 
-		//Take all nodes from this parent
+		//Take all nodes from this parent - output node activation 50%-50%
 		for(let i = 0; i < this.nodes.length; i++){
 			let node = this.nodes[i].clone();
+			if(node.output) {
+				let partnerNode = partner.nodes[partner.getNode(node.number)];
+				if(Math.random() > 0.5) {
+					node.activationFunction = partnerNode.activationFunction;
+					node.bias = partnerNode.bias;
+				}
+			}
 			offSpring.nodes.push(node);
 		}
 		
