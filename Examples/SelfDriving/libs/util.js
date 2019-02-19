@@ -1,4 +1,12 @@
-function getClosestPointOnLines(pXy, aXys) {
+/* desc Static function. Find point on lines nearest test point
+   test point pXy with properties .x and .y
+   lines defined by array aXys with nodes having properties .x and .y 
+   return is object with .x and .y properties and property i indicating nearest segment in aXys 
+   and property fFrom the fractional distance of the returned point from aXy[i-1]
+   and property fTo the fractional distance of the returned point from aXy[i]   */
+
+
+   function getClosestPointOnLines(pXy, aXys) {
 
     var minDist;
     var fTo;
@@ -12,22 +20,22 @@ function getClosestPointOnLines(pXy, aXys) {
 
         for (var n = 1 ; n < aXys.length ; n++) {
 
-            if (aXys[n].l[0] != aXys[n - 1].l[0]) {
-                var a = (aXys[n].l[1] - aXys[n - 1].l[1]) / (aXys[n].l[0] - aXys[n - 1].l[0]);
-                var b = aXys[n].l[1] - a * aXys[n].l[0];
+            if (aXys[n].x != aXys[n - 1].x) {
+                var a = (aXys[n].y - aXys[n - 1].y) / (aXys[n].x - aXys[n - 1].x);
+                var b = aXys[n].y - a * aXys[n].x;
                 dist = Math.abs(a * pXy.x + b - pXy.y) / Math.sqrt(a * a + 1);
             }
             else
-                dist = Math.abs(pXy.x - aXys[n].l[0])
+                dist = Math.abs(pXy.x - aXys[n].x)
 
             // length^2 of line segment 
-            var rl2 = Math.pow(aXys[n].l[1] - aXys[n - 1].l[1], 2) + Math.pow(aXys[n].l[0] - aXys[n - 1].l[0], 2);
+            var rl2 = Math.pow(aXys[n].y - aXys[n - 1].y, 2) + Math.pow(aXys[n].x - aXys[n - 1].x, 2);
 
             // distance^2 of pt to end line segment
-            var ln2 = Math.pow(aXys[n].l[1] - pXy.y, 2) + Math.pow(aXys[n].l[0] - pXy.x, 2);
+            var ln2 = Math.pow(aXys[n].y - pXy.y, 2) + Math.pow(aXys[n].x - pXy.x, 2);
 
             // distance^2 of pt to begin line segment
-            var lnm12 = Math.pow(aXys[n - 1].l[1] - pXy.y, 2) + Math.pow(aXys[n - 1].l[0] - pXy.x, 2);
+            var lnm12 = Math.pow(aXys[n - 1].y - pXy.y, 2) + Math.pow(aXys[n - 1].x - pXy.x, 2);
 
             // minimum distance^2 of pt to infinite line
             var dist2 = Math.pow(dist, 2);
@@ -60,11 +68,11 @@ function getClosestPointOnLines(pXy, aXys) {
             }
         }
 
-        var dx = aXys[i - 1].l[0] - aXys[i].l[0];
-        var dy = aXys[i - 1].l[1] - aXys[i].l[1];
+        var dx = aXys[i - 1].x - aXys[i].x;
+        var dy = aXys[i - 1].y - aXys[i].y;
 
-        x = aXys[i - 1].l[0] - (dx * fTo);
-        y = aXys[i - 1].l[1] - (dy * fTo);
+        x = aXys[i - 1].x - (dx * fTo);
+        y = aXys[i - 1].y - (dy * fTo);
 
     }
 

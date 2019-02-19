@@ -31,6 +31,10 @@ var points = [
 	{l: [700,50], r: [725,85]},
 	{l: [800,50], r: [800,85]},
 ];
+var path = [];
+for(let i = 0; i < points.length; i++)
+	path.push({x: (points[i].l[0]+points[i].r[0])/2, y: (points[i].l[1]+points[i].r[1])/2})
+
 
 var textureGround = new THREE.TextureLoader().load( "./img/asphalt.jpg" );
 var textureWalls = new THREE.TextureLoader().load( "./img/wireframe.png" );
@@ -324,23 +328,23 @@ function restart(crash = false) {
 
 	let x = car.position.x + groundWidth/2;
 	let z = car.position.z + groundHeight/2;
-	let result = getClosestPointOnLines({x:x, y:z}, points);
+	let result = getClosestPointOnLines({x:x, y:z}, path);
 
 	let dist = 0;
 	for(let i = 1; i < result.i; i++) {
-		let segDist = Math.sqrt(Math.pow(points[i-1].l[0]-points[i].l[0], 2) + Math.pow(points[i-1].l[1]-points[i].l[1], 2));
+		let segDist = Math.sqrt(Math.pow(path[i-1].x-path[i].x, 2) + Math.pow(path[i-1].y-path[i].y, 2));
 		segDist *= segDist < 0 ? -1 : 1;
 		dist += segDist;
 	}
 	
 	
-	let additionalDist = Math.sqrt(Math.pow(points[result.i - 1].l[0]-result.x, 2) + Math.pow(points[result.i - 1].l[1]-result.y, 2));
+	let additionalDist = Math.sqrt(Math.pow(path[result.i - 1].x-result.x, 2) + Math.pow(path[result.i - 1].y-result.y, 2));
 	additionalDist *= additionalDist < 0 ? -1 : 1;
 	dist += additionalDist;
 
 	let score = dist;//Math.sqrt(Math.pow(car.position.x + groundWidth/2, 2) + Math.pow(car.position.z + groundHeight/2, 2));
 	population.population[playerCounter].score = score;
-	population.population[playerCounter].fitness = score;
+	population.population[playerCounter].fitness = Math.pow(score, 2);
 
 	if(crash && document.getElementById("crashCheckbox").checked) {
 		population.population[playerCounter].score *= 0.75;
@@ -363,10 +367,12 @@ function restart(crash = false) {
 	}
 
 
+	vision = [];
+	deltaLifespan = 0;
+	prevPosition = [];
+	mediumVelocity = 0;
 	sumCounter = 0;
 	velocitySum = 0;
-	prevPosition = [];
-	deltaLifespan = 0;
 	console.log("Genome: " + playerCounter + " - Score: " + population.population[playerCounter].score);
 
 	playerCounter++;
@@ -383,8 +389,8 @@ function restart(crash = false) {
         scene.removeConstraint(constraints[i]);
     
     scene.collisions = {};
-	constraints.splice(0, constraints.length);
-	walls.splice(0, walls.length);
+	constraints = [];
+	walls = [];
 	initScene();
 };
 
