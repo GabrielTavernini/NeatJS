@@ -75,6 +75,10 @@ var sumCounter = 0;
 var velocitySum = 0;
 
 initScene = function () {
+
+	population.population[playerCounter].brain.id = "currentGenome";
+	population.population[playerCounter].brain.draw("currentSvgContainer");
+
 	// AmbientLight
 	var ambient = new THREE.AmbientLight(0xFFFFFF,2);
 	scene.add(ambient);
@@ -132,11 +136,11 @@ initScene = function () {
 			controls.changeVelocity();
 		}
 		else if (key === 37) { // left
-			controls.wheelAngle = +.3;
+			controls.wheelAngle = +.4;
 			controls.changeOrientation();
 		}
 		else if (key === 39) { // right
-			controls.wheelAngle = -.3;
+			controls.wheelAngle = -.4;
 			controls.changeOrientation();
 		}
 		if (key === 32) { // space
@@ -344,8 +348,12 @@ function restart(crash = false) {
 
 	let score = dist;//Math.sqrt(Math.pow(car.position.x + groundWidth/2, 2) + Math.pow(car.position.z + groundHeight/2, 2));
 	population.population[playerCounter].score = score;
-	population.population[playerCounter].fitness = Math.pow(score, 2);
+	if(document.getElementById("expCheckbox").checked)
+		population.population[playerCounter].fitness = Math.pow(score, 2);
+	else
+		population.population[playerCounter].fitness = score;
 
+		
 	if(crash && document.getElementById("crashCheckbox").checked) {
 		population.population[playerCounter].score *= 0.75;
 		population.population[playerCounter].fitness *= 0.75;
@@ -360,10 +368,11 @@ function restart(crash = false) {
 
 
 	if(population.population[playerCounter].fitness > population.bestFitness){
+		population.bestScore = population.population[playerCounter].score;
 		population.bestFitness = population.population[playerCounter].fitness;
 		population.bestPlayer = population.population[playerCounter].clone();
 		population.bestPlayer.brain.id = "BestGenome";
-		population.bestPlayer.brain.draw();
+		population.bestPlayer.brain.draw("bestSvgContainer");
 	}
 
 
@@ -391,14 +400,16 @@ function restart(crash = false) {
     scene.collisions = {};
 	constraints = [];
 	walls = [];
+
 	initScene();
 };
 
 render = function () {
 	mediumVelocity = velocitySum / sumCounter;
 	document.getElementById("genomeN").innerHTML = playerCounter;
-    document.getElementById("generationN").innerHTML = population.generation;
-	document.getElementById("bestScore").innerHTML = population.bestFitness;
+	document.getElementById("generationN").innerHTML = population.generation;
+	document.getElementById("bestFitness").innerHTML = population.bestFitness;
+	document.getElementById("bestScore").innerHTML = population.bestScore;
     document.getElementById("mediumV").innerHTML = mediumVelocity;
 
 	cameraFollow = document.getElementById("followCheckbox").checked;
@@ -507,7 +518,7 @@ render = function () {
 	document.getElementById("currentV").innerHTML =  -controls.velocity;
 	controls.changeVelocity();
 
-	controls.wheelAngle = decisions[1] < .3 && decisions[1] > -.3 ? decisions[1] : decisions[1] < 0 ? -.3 : .3;
+	controls.wheelAngle = decisions[1] < .4 && decisions[1] > -.4 ? decisions[1] : decisions[1] < 0 ? -.4 : .4;
 	document.getElementById("currentS").innerHTML =  controls.wheelAngle;
 	controls.changeOrientation();
 

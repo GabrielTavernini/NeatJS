@@ -29,10 +29,18 @@
 
 		.right {
 			display: inline-block;
+			margin-left: 20px;
 		}
 
 		#viewport {
 			margin-bottom: 10px;
+		}
+
+		.current {
+			border-right: solid;
+			padding-right: 10px;
+			padding-bottom: 20px;
+			float: left;
 		}
 	</style>
 </head>
@@ -42,29 +50,38 @@
 		<div id="viewport"></div>
 	</div>
 	
-	<div class="right">
-		<h2>Best Genome:</h2>
-		<div id="svgContainer"></div>
-		
-		Best Fitness: <span id="bestScore"></span>
-		</br>
-		Current Genome: <span id="genomeN"></span>
-		</br>
-		Current Generation: <span id="generationN"></span>
-		</br>
-		Current Steering: <span id="currentS"></span>
-		</br>
-		Current Velocity: <span id="currentV"></span>
-		</br>
-		Current Medium Velocity: <span id="mediumV"></span>
+	<div style="display: inline-block" >
+		<div class="right current">
+			<div id="currentSvgContainer"><h2>Current Genome:</h2></div>
 
-		<h2>Options:</h2>
-		Follow the Car: <input id="followCheckbox" type="checkbox" checked>
-		</br>
-		Malus for car crash: <input id="crashCheckbox" type="checkbox">
-		</br>
-		Include velocity into Fitness: <input id="velocityCheckbox" type="checkbox">
-		</br>
+			Current Genome: <span id="genomeN"></span>
+			</br>
+			Current Generation: <span id="generationN"></span>
+			</br>
+			Current Steering: <span id="currentS"></span>
+			</br>
+			Current Velocity: <span id="currentV"></span>
+			</br>
+			Current Medium Velocity: <span id="mediumV"></span>
+
+			<h2>Options:</h2>
+			Follow the Car: <input id="followCheckbox" type="checkbox" checked>
+			</br>
+			Malus for car crash: <input id="crashCheckbox" type="checkbox">
+			</br>
+			Exponential Fitness Function: <input id="expCheckbox" type="checkbox" checked>
+			</br>
+			Include velocity into Fitness: <input id="velocityCheckbox" type="checkbox">
+			</br>
+		</div>
+
+		<div class="right">
+			<div id="bestSvgContainer"><h2>Best Genome:</h2></div>
+
+			Best Score: <span id="bestScore"></span>
+			</br>
+			Best Fitness: <span id="bestFitness"></span>
+		</div>
 	</div>
 	
 </body>

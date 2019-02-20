@@ -11,6 +11,7 @@ class Population{
 		this.population = [];
 		this.bestPlayer;
 		this.bestFitness = 0;
+		this.bestScore = 0;
 
 		this.generation = 0;
 		this.matingPool = [];
@@ -59,12 +60,6 @@ class Population{
 		let currentMax = 0;
 		this.population.forEach((element) => { 
 			element.calculateFitness();
-			if(element.fitness > this.bestFitness){
-				this.bestFitness = element.fitness;
-				this.bestPlayer = element.clone();
-				this.bestPlayer.brain.id = "BestGenome";
-				this.bestPlayer.brain.draw();
-			}
 
 			if(element.fitness > currentMax)
 				currentMax = element.fitness;
