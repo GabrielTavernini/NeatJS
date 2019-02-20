@@ -327,7 +327,7 @@ class Genome {
 
 		let connections = [];
 		this.connections.forEach(conn => {
-			connections.push({ source: conn.fromNode.number, target: conn.toNode.number, weight: conn.weight, enabled: conn.enabled });
+			connections.push({ source: this.getNode(conn.fromNode.number), target: this.getNode(conn.toNode.number), weight: conn.weight, enabled: conn.enabled });
 		});
 
 		let nodes = [];

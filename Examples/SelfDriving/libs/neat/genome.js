@@ -304,13 +304,13 @@ class Genome {
 		return this.connections.length + this.nodes.length;
 	}
 
-	draw() { //Draw the genome to a svg
+	draw(svgContainer) { //Draw the genome to a svg
 		var element = document.getElementById(this.id);
 		if (element)
 			element.parentNode.removeChild(element);
 
-		var width = 400,
-			height = 400;
+		var width = 350,
+			height = 350;
 
 		var svg = d3.select("body").append("svg")
 			.attr("width", width)
@@ -327,7 +327,7 @@ class Genome {
 
 		let connections = [];
 		this.connections.forEach(conn => {
-			connections.push({ source: conn.fromNode.number, target: conn.toNode.number, weight: conn.weight, enabled: conn.enabled });
+			connections.push({ source: this.getNode(conn.fromNode.number), target: this.getNode(conn.toNode.number), weight: conn.weight, enabled: conn.enabled });
 		});
 
 		let nodes = [];
@@ -336,7 +336,7 @@ class Genome {
 			if(node.layer == 0) {
 				node.fixed = true;
 				node.y =  height - (height * 0.2);
-				node.x = ((width/this.inputs) * node.number) + (width/this.inputs)/2;
+				node.x = ((width/this.inputs) * node.number) + (width/this.inputs)/3;
 			}
 
 			if(node.output) {
@@ -384,6 +384,6 @@ class Genome {
 		});
 
 		var element = document.getElementById(this.id);
-		document.getElementById("svgContainer").append(element);
+		document.getElementById(svgContainer).append(element);
 	}
 }
