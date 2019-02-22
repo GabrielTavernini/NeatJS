@@ -15,3 +15,6 @@ Pole balancing is a control benchmark historically used in engineering. It invol
 #### Target Seeking
 In this example, we have four different populations, and each population evolves independently and at the end of each generation the best population on average score gets a point. The purpose of each player is to stay in the circle as long as possible. [Check it out!](https://gabrieltavernini.github.io/NeatJS/Examples/TargetSeeking/)
 
+
+#### Self Driving Car
+Applying the NEAT algorithm to a 3D car trying to get along a course, we can clearly see how Neural Networks evolve generation after generation improving their abilities to get along the track. You can even tweak different parameters to customize the fitness function. [Try it!](https://gabrieltavernini.github.io/NeatJS/Examples/SelfDriving/)
