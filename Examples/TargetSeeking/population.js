@@ -82,7 +82,7 @@ class Population{
 				bestFitness = element.fitness;
 				bestPlayer = element.clone();
 				bestPlayer.brain.id = "BestGenome";
-				bestPlayer.brain.draw();
+				bestPlayer.brain.draw(250, 250);
 			}
 
 			if(element.fitness > currentMax)

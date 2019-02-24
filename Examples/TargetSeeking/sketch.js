@@ -9,8 +9,6 @@ var p1 = 0, p2 = 0, p3 = 0, p4 = 0;
 function setup() {
 	let canvas = createCanvas(600, 600);
 	canvas.parent('canvascontainer');
-	points = createP();
-	points.parent('leftDiv');
 
 	population1 = new Population(20, 0);
 	population2 = new Population(20, 1);
@@ -28,9 +26,16 @@ function draw() {
 	cycles = document.getElementById('speedSlider').value;
 	document.getElementById('speed').innerHTML = cycles;
 	move = document.getElementById('moveCheckbox').checked;
+	document.getElementById('generationN').innerHTML = population1.generation;
+	document.getElementById('bestFitness').innerHTML = bestFitness;
 
-	if(cycles != 0)
+	if(cycles != 0) {
 		background(61);
+		stroke(255);
+		noFill();
+		ellipse(target.x, target.y, 200);
+		ellipse(target.x, target.y, 2);	
+	}
 	
 
 	for(let i = 0; i < cycles; i++) {
@@ -64,8 +69,11 @@ function draw() {
 			else if(max == population4.getAverageScore())
 				p4++;
 	
-			points.html("RED: " + p1 + "  GREEN: " + p2 + "  BLUE: " + p3 + "  YELLOW: " + p4 + "  Max: " + max);
-			
+			document.getElementById('red').innerHTML = p1;
+			document.getElementById('green').innerHTML = p2;
+			document.getElementById('blue').innerHTML = p3;
+			document.getElementById('yellow').innerHTML = p4;
+
 			population1.naturalSelection();
 			population2.naturalSelection();
 			population3.naturalSelection();
@@ -79,12 +87,6 @@ function draw() {
 			target.y = height/2 + Math.sin(angle * 180/Math.PI) * 100;
 		}	
 	}
-	
-	
-	stroke(255);
-	noFill();
-	ellipse(target.x, target.y, 200);
-	ellipse(target.x, target.y, 2);	
 }
 
 function mouseReleased() {
