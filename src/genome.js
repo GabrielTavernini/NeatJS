@@ -304,13 +304,10 @@ class Genome {
 		return this.connections.length + this.nodes.length;
 	}
 
-	draw() { //Draw the genome to a svg
+	draw(width = 400, height = 400, container = "svgContainer") { //Draw the genome to a svg
 		var element = document.getElementById(this.id);
 		if (element)
 			element.parentNode.removeChild(element);
-
-		var width = 400,
-			height = 400;
 
 		var svg = d3.select("body").append("svg")
 			.attr("width", width)
@@ -382,5 +379,8 @@ class Genome {
 
 			node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 		});
+
+		var element = document.getElementById(this.id);
+		document.getElementById(container).append(element);
 	}
 }

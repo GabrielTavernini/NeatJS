@@ -19,12 +19,60 @@
 	<script src="connection.js"></script>
 	<script src="genome.js"></script>
 
+	<style>
+		.left {
+			float: left;
+			margin: 5px;
+			margin-right: 10px;
+			font-size: 18px;
+		}
+
+		.right {
+			display: inline-block;
+			margin-left: 20px;
+		}
+
+		.current {
+			border-left: solid;
+			padding-left: 10px;
+			float: right;
+		}
+	</style>
 </head>
 
 <body>
-	<div id="canvascontainer"></div>
-    speed: <input id="speedSlider" type="range" min="0" max="20" value="1"> <span id="speed">1</span>
-    <div id="svgContainer"></div>
+	<div id="leftDiv" class="left">
+		<div id="canvascontainer"></div>
+	</div>
+	
+	<div style="display: inline-block" >
+		<div class="right">
+			<h2>Data:</h2>
 
+			Best Fitness: <span id="bestFitness"></span>
+			</br>
+			Current Generation: <span id="generationN"></span>
+			</br>
+			Prev. Gen. Medium Score: <span id="prevScore">0</span>
+			</br>
+			Prev. Gen. Medium HitRate: <span id="prevHitRate">0</span>
+			</br>
+
+			<h2>Options:</h2>
+			Show All players: <input id="allCheckbox" type="checkbox" checked>
+			</br>
+			Show the best player: <input id="bestCheckbox" type="checkbox">
+			</br>
+			Run only the best player: <input id="runBestCheckbox" type="checkbox">
+			</br>
+			Exponential Fitness Function: <input id="expCheckbox" type="checkbox">
+			</br>
+			Speed: <input id="speedSlider" type="range" min="0" max="20" value="1"> <span id="speed">1</span>
+		</div>
+
+		<div class="right current">
+			<div id="svgContainer"><h2>Best Genome:</h2></div>
+		</div>
+	</div>
 </body>
 </html>

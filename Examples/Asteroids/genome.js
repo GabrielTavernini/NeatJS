@@ -310,7 +310,7 @@ class Genome {
 			element.parentNode.removeChild(element);
 
 		var width = 400,
-			height = 400;
+			height = 300;
 
 		var svg = d3.select("body").append("svg")
 			.attr("width", width)
@@ -382,5 +382,8 @@ class Genome {
 
 			node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 		});
+
+		var element = document.getElementById(this.id);
+		document.getElementById("svgContainer").append(element);
 	}
 }

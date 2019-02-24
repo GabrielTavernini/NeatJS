@@ -4,6 +4,7 @@ let bestPlayer;
 let bestFitness = 0;
 let showBest = true;
 let showAll = false;
+let runOnlyBest = false;
 
 //The Population Class
 //Here is where the power of all the classes
@@ -21,33 +22,48 @@ class Population{
 			this.population[i].brain.mutate();
 		}
 
-		bestPlayer = this.population[0].clone();;
+		bestPlayer = this.population[0].clone();
+		bestPlayer.brain.id = "BestGenome";
+		bestPlayer.brain.draw();
 	}
 
 	updateAlive(show){
-		for(let i = 0; i < this.population.length; i++){
-			if(!this.population[i].dead){
-				this.population[i].look();
-				this.population[i].think();
-				this.population[i].move();
-				this.population[i].update();
+		if(!runOnlyBest) {
+			for(let i = 0; i < this.population.length; i++){
+				if(!this.population[i].dead){
+					this.population[i].look();
+					this.population[i].think();
+					this.population[i].move();
+					this.population[i].update();
 
-				if(show && showAll)
-					this.population[i].show();
+					if(show && showAll)
+						this.population[i].show();
+				}
 			}
-		}
 
-		if(bestPlayer && !bestPlayer.dead){
+			if(bestPlayer && !bestPlayer.dead){
+				bestPlayer.look();
+				bestPlayer.think();
+				bestPlayer.move();
+				bestPlayer.update();
+				if(show && showBest)
+					bestPlayer.show();
+			}
+		} else {
 			bestPlayer.look();
 			bestPlayer.think();
 			bestPlayer.move();
 			bestPlayer.update();
-			if(show && showBest)
-				bestPlayer.show();
+			bestPlayer.show();
 		}
 	}
 
 	done(){
+		if(runOnlyBest && bestPlayer.dead){
+			bestPlayer = bestPlayer.clone();
+			return true;
+		}
+
 		for(let i = 0; i < this.population.length; i++){
 			if(!this.population[i].dead){
 				return false;
@@ -59,10 +75,16 @@ class Population{
 	}
 	
 	naturalSelection(){
+		if(runOnlyBest)
+			return;
+
 		this.calculateFitness();
 
-		let averageSum = this.getAverageScore();
-		console.log(averageSum);
+		let averageSums = this.getAverageScore();
+		console.log(averageSums[0]);
+		document.getElementById("prevScore").innerHTML = averageSums[0];
+		document.getElementById("prevHitRate").innerHTML = averageSums[1];
+
 		let children = [];
 		
 		this.fillMatingPool();
@@ -124,10 +146,12 @@ class Population{
 
 	getAverageScore(){
 		let avSum = 0;
+		let avHit = 0;
 		this.population.forEach((element) => { 
 			avSum += element.score;
+			avHit += element.hitRate;
 		});
 
-		return avSum / this.population.length;
+		return [avSum / this.population.length, avHit / this.population.length];
 	}
 }

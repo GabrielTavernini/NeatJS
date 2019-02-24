@@ -17,16 +17,35 @@
   <script src="../../src/genome.js"></script>
   
   <style>
-	  .canvas {
-		float: left;
-		margin: 20px;
-	  }
+		.canvas {
+			float: left;
+			margin: 20px;
+		}
 
-	  .genome {
-		clear: left;
-		margin: 20px;
-		font-size: 20px;
-	  }
+		.genome {
+			clear: left;
+			margin: 20px;
+			font-size: 20px;
+		}
+
+		.left {
+			float: left;
+			margin: 5px;
+			margin-right: 10px;
+			font-size: 18px;
+		}
+
+		.right {
+			display: inline-block;
+			margin-left: 20px;
+		}
+
+		.current {
+			border-right: solid;
+			padding-right: 10px;
+			padding-bottom: 20px;
+			float: left;
+		}
   </style>
 </head>
 
@@ -43,7 +62,28 @@
 
 	</div>
 
-	<p class="genome">Best Genome:</p>
-    <div id="svgContainer"></div>
+	<div style="display: inline-block" >
+		<div class="right current">
+			<h2>Data:</h2>
+			Current Generation: <span id="generationN"></span>
+			</br>
+			Prev. Gen. Mean Fitness: <span id="meanFit"></span>
+			</br>
+
+			<h2>Options:</h2>
+			Pole length: <input id="lengthSlider" type="range" min="1" max="10" value="5"> <span id="length">5</span>
+			</br>
+			Angle Threshold: <input id="thetaSlider" type="range" min="1" max="45" value="20"> <span id="theta">5</span>
+			</br>
+			Cart Force: <input id="forceSlider" type="range" min="1" max="20" value="10"> <span id="force">10</span>
+			</br>
+		</div>
+	
+		<div class="right">
+			<h2>Best Genome:</h2>
+			Best Fitness: <span id="bestFitness"></span>
+			<div id="svgContainer"></div>
+		</div>
+	</div>
 </body>
 </html>

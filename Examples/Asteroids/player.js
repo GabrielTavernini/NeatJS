@@ -23,7 +23,6 @@ class Player{
 			let astPos = createVector(width/2 + Math.cos(tempAngle) * asteroidsDistance, height/2 + Math.sin(tempAngle) * asteroidsDistance);
 			let angleToShip = this.angleFromPoint(astPos.x, astPos.y);
 
-			text(angleToShip * 180 / Math.PI, astPos.x, astPos.y);
 			let ast = new asteroid(astPos, random(20,50), angleToShip);
 			this.asteroids[j] = ast;
 			angle += (Math.PI * 2) / asteroidsN;
@@ -134,11 +133,11 @@ class Player{
 	}
 
 	calculateFitness(){ //Fitness function : adapt it to the needs of the
-		let hitRate = this.score/this.ship.shots;
+		this.hitRate = this.score/this.ship.shots;
 		this.fitness = (this.score)*10;
 		this.fitness *= this.lifespan;
-		this.fitness *= hitRate*hitRate;	
-		this.score = this.fitness;
+		this.fitness *= this.hitRate*this.hitRate;	
+		this.fitness *= expFunc ? this.fitness : 1;
 	}
 
 	angleFromPoint(x, y){

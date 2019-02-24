@@ -3,7 +3,7 @@ let genomeOutputN = 1;
 let showBest = false;
 let bestPlayer;
 let bestFitness = 0;
-
+let meanFitness = 0;
 //The Population Class
 //Here is where the power of all the classes
 //comes together to destroy the game score records
@@ -55,6 +55,7 @@ class Population{
 		this.calculateFitness();
 
 		let averageSum = this.getAverageScore();
+		meanFitness = averageSum;
 		console.log(averageSum);
 		let children = [];
 		
@@ -88,7 +89,7 @@ class Population{
 				bestFitness = element.fitness;
 				bestPlayer = element.clone();
 				bestPlayer.brain.id = "BestGenome";
-				bestPlayer.brain.draw();
+				bestPlayer.brain.draw(200,200);
 			}
 
 			if(element.fitness > currentMax)

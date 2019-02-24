@@ -7,6 +7,16 @@ function setup() {
 }
 
 function draw() {
+	document.getElementById("generationN").innerHTML = population.generation;
+	document.getElementById("bestFitness").innerHTML = bestFitness;
+	document.getElementById("meanFit").innerHTML = meanFitness;
+	length = select('#lengthSlider').value();
+	select('#length').html(length);
+	theta = select('#thetaSlider').value();
+	select('#theta').html(theta);
+	force = select('#forceSlider').value();
+	select('#force').html(force);
+
 	if(population.done())
 		population.naturalSelection();
 	else

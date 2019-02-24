@@ -10,14 +10,14 @@ class CartPole {
 		this.totalMass = this.massCart + this.massPole;
 		this.cartWidth = 0.2;
 		this.cartHeight = 0.1;
-		this.length = 0.5;
+		this.length = select('#lengthSlider').value()/10;
 		this.poleMoment = this.massPole * this.length;
-		this.forceMag = 10.0;
+		this.forceMag = select('#forceSlider').value();
 		this.tau = 0.02;  // Seconds between state updates.
 
 		// Threshold values, beyond which a simulation will be marked as failed.
 		this.xThreshold = 2.4;
-		this.thetaTheshold = 20 / 360 * 2 * Math.PI;
+		this.thetaThreshold = select('#thetaSlider').value() / 360 * 2 * Math.PI;
 
 		this.setRandomState();
 	}
@@ -83,6 +83,6 @@ class CartPole {
    */
 	isDone() {
 		return this.x < -this.xThreshold || this.x > this.xThreshold ||
-			this.theta < -this.thetaTheshold || this.theta > this.thetaTheshold;
+			this.theta < -this.thetaThreshold || this.theta > this.thetaThreshold;
 	}
 }
