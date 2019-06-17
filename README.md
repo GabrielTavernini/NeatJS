@@ -18,3 +18,7 @@ In this example, we have four different populations, and each population evolves
 
 #### Self Driving Car
 Applying the NEAT algorithm to a 3D car trying to get along a course, we can clearly see how Neural Networks evolve generation after generation improving their abilities to get along the track. You can even tweak different parameters to customize the fitness function. [Try it!](https://gabrieltavernini.github.io/NeatJS/Examples/SelfDriving/)
+
+
+#### Atari Asteroids
+A population of 150 spaceships evolving to beat the old Atari Asteroids Game. Spaceships can see the distance to the closest asteroid in 16 directions evenly spaced around them and can move forward, turn right or left and shoot. [Try it!](https://gabrieltavernini.github.io/NeatJS/Examples/Asteroids/)
