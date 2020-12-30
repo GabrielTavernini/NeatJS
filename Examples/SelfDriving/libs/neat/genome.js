@@ -191,8 +191,8 @@ class Genome {
 		});
 
 		//New connections
-		let newConnection1 = new Connection(pickedConnection.fromNode, newNode, Math.random() * this.inputs * Math.sqrt(2 / this.inputs));
-		let newConnection2 = new Connection(newNode, pickedConnection.toNode, Math.random() * this.inputs * Math.sqrt(2 / this.inputs));
+		let newConnection1 = new Connection(pickedConnection.fromNode, newNode, 1);
+		let newConnection2 = new Connection(newNode, pickedConnection.toNode, pickedConnection.weight);
 
 		this.layers++;
 		this.connections.push(newConnection1); //Add connection
