@@ -6,7 +6,7 @@ class Node {
 	constructor(num, lay, isOutput) {
 		this.number = num;
 		this.layer = lay;
-		this.activationFunction = Math.floor(Math.random() * 6); //Number between 0 and 4
+		this.activationFunction = Math.floor(Math.random() * (sinAllowed ? 6 : 5)); //Number between 0 and 4
 		this.bias = Math.random() * 2 - 1;
 		this.output = isOutput || false; //is this node an Output node?
 
@@ -34,7 +34,7 @@ class Node {
 	}
 
 	mutateActivation() { //Randomly choose a new activationFunction
-		this.activationFunction = Math.floor(Math.random() * 6); //Number between 0 and 4
+		this.activationFunction = Math.floor(Math.random() * (sinAllowed ? 6 : 5)); //Number between 0 and 4
 	}
 
 	isConnectedTo(node) { //Check if two nodes are connected

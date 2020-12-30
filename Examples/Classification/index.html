@@ -8,16 +8,20 @@
 		<script src="https://d3js.org/d3.v2.min.js?2.9.3"></script>
 
 		<script src="../../src/population.js"></script>
-		<script src="./player.js"></script>
-		<script src="./node.js"></script>
 		<script src="../../src/connection.js"></script>
-		<script src="./genome.js"></script>
+		<script src="../../src/genome.js"></script>
+		<script src="node.js"></script>
+		<script src="player.js"></script>
 		<script src="sketch.js"></script>
 
 		<style>
 			.left {
 			  float: left;
 			  margin: 5px;
+			}
+
+			p span {
+				font-weight: bold;
 			}
 		</style>
 
@@ -26,7 +30,12 @@
 	<body>
 		<div class="left">
 			<div id="canvascontainer"></div>
+			<p>Correctly classified as: <span style="color: #00ff00">Class 1</span> &  <span style="color: #0000ff">Class 2</span><br>
+			 <span style="color: #ff0000">Not</span> Correctly Classified</p>
 			<div>
+				<h2>Options:</h2>
+				Use Sin as activation: <input id="sinCheckbox" type="checkbox" checked>
+				</br>
 				Speed: <input id="speedSlider" type="range" min="0" max="60" value="1"> <span id="speed">1</span>
 			</div>
 		</div>

@@ -24,7 +24,7 @@ class Population{
 
 		bestPlayer = this.population[0].clone();
 		bestPlayer.brain.id = "BestGenome";
-		bestPlayer.brain.draw();
+		bestPlayer.brain.draw(400, 300, "svgContainer");
 	}
 
 	updateAlive(show){

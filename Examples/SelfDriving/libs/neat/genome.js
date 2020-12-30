@@ -76,7 +76,7 @@ class Genome {
 	crossover(partner) {
 		//TODO: find a good way to generate unique ids
 		let offSpring = new Genome(this.inputs, this.outputs, 0, true); //Child genome
-		offSpring.nextNode = this.nextNode; 
+		offSpring.nextNode = this.nextNode;
 
 
 		//Take all nodes from this parent - output node activation 50%-50%
@@ -91,15 +91,15 @@ class Genome {
 			}
 			offSpring.nodes.push(node);
 		}
-		
+
 		//Randomly take connections from this or the partner network
 		let maxLayer = 0;
 		for(let i = 0; i < this.connections.length; i++) {
 			let index = this.commonConnection(this.connections[i].getInnovationNumber(), partner.connections);
-			
+
 			if(index != -1) { //There is a commonConnection
 				let conn = Math.random() > 0.5 ? this.connections[i].clone() : partner.connections[index].clone();
-				
+
 				//Reassign nodes
 				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
 				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
@@ -110,9 +110,9 @@ class Genome {
 				if(fromNode && toNode)
 					offSpring.connections.push(conn);
 			}
-			else  { //No common connection -> take from this
+			else { //No common connection -> take from this
 				let conn = this.connections[i].clone();
-				
+
 				//Reassign nodes
 				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
 				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
@@ -128,7 +128,7 @@ class Genome {
 		offSpring.layers = this.layers;
 		return offSpring;
 	}
-	
+
 
 
 	//Mutation Stuff
@@ -368,7 +368,7 @@ class Genome {
 		node.append("circle")
 			.attr("r", "5")
 			.attr("fill", function (d) { return d.layer == 0 ? "#00f" : d.output ? "#f00" : "#000" });
-		
+
 		node.append("text")
 			.attr("dx", 12)
 			.attr("dy", ".35em")

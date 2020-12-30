@@ -1,7 +1,7 @@
 var population;
-var cycles;
+var cycles, sinAllowed;
 var points = [];
-var myFunction = function(x) { 
+var myFunction = function(x) {
 	return Math.sin(x)*0.4 + 0.5;
 };
 
@@ -31,6 +31,7 @@ function setup() {
 }
 
 function draw() {
+	sinAllowed = document.getElementById("sinCheckbox").checked;
 	cycles = select('#speedSlider').value();
 	select('#speed').html(cycles);
 
