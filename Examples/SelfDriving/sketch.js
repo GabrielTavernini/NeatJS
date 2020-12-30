@@ -306,7 +306,7 @@ function createGround() {
 		let mesh = new Physijs.BoxMesh(geometry, material);
 		mesh.position.x = (points[i].l[0] + points[i+1].l[0])/2 - groundWidth/2;
 		mesh.position.z = (points[i].l[1] + points[i+1].l[1])/2 - groundHeight/2;
-		mesh.position.y = 15;
+		mesh.position.y = 14;
 		mesh.rotation.y = Math.atan2(b, a);
 
 		ground.add(mesh);
@@ -319,7 +319,7 @@ function createGround() {
 		let mesh2 = new Physijs.BoxMesh(geometry2, material);
 		mesh2.position.x = (points[i].r[0] + points[i+1].r[0])/2 - groundWidth/2;
 		mesh2.position.z = (points[i].r[1] + points[i+1].r[1])/2 - groundHeight/2;
-		mesh2.position.y = 15;
+		mesh2.position.y = 14;
 		mesh2.rotation.y = Math.atan2(b2, a2);
 
 		ground.add(mesh2);
@@ -340,8 +340,8 @@ function restart(crash = false) {
 		segDist *= segDist < 0 ? -1 : 1;
 		dist += segDist;
 	}
-	
-	
+
+
 	let additionalDist = Math.sqrt(Math.pow(path[result.i - 1].x-result.x, 2) + Math.pow(path[result.i - 1].y-result.y, 2));
 	additionalDist *= additionalDist < 0 ? -1 : 1;
 	dist += additionalDist;
@@ -353,7 +353,7 @@ function restart(crash = false) {
 	else
 		population.population[playerCounter].fitness = score;
 
-		
+
 	if(crash && document.getElementById("crashCheckbox").checked) {
 		population.population[playerCounter].score *= 0.75;
 		population.population[playerCounter].fitness *= 0.75;
@@ -392,11 +392,11 @@ function restart(crash = false) {
 	}
 
 	while(scene.children.length > 0)
-		scene.remove(scene.children[0]); 
-    
+		scene.remove(scene.children[0]);
+
     for(let i = 0; i < constraints.length; i++)
         scene.removeConstraint(constraints[i]);
-    
+
     scene.collisions = {};
 	constraints = [];
 	walls = [];
@@ -425,7 +425,7 @@ render = function () {
 	//------------------------------------------------------------------------------------------
 	//--------------------------------Collect Vision Data---------------------------------------
 	//------------------------------------------------------------------------------------------
-	
+
 	vision = [];
 	//Straight
 	var position = new THREE.Vector3( car.position.x, 0, car.position.z);
@@ -451,8 +451,8 @@ render = function () {
 	} else{
 		vision.push(0);
 	}
-	
-	
+
+
 	//45 degree right
 	direction = new THREE.Vector3(Math.sin(car.rotation.y + Math.PI/4), 0, Math.cos(car.rotation.y + Math.PI/4));
 	direction.normalize();
@@ -476,8 +476,8 @@ render = function () {
 	} else{
 		vision.push(0);
 	}
-	
-	
+
+
 	//45 degree left
 	direction = new THREE.Vector3(Math.sin(car.rotation.y + 3*Math.PI/4), 0, Math.cos(car.rotation.y + 3*Math.PI/4));
 	direction.normalize();
@@ -510,7 +510,7 @@ render = function () {
 	population.population[playerCounter].vision = vision.slice(0, vision.length);
 	population.population[playerCounter].think();
 	var decisions = population.population[playerCounter].decisions;
-	
+
 	decisions[0] *= 20;
 	controls.velocity = decisions[0] < 20 && decisions[0] > -20 ? -decisions[0] : decisions[0] < 0 ? 20 : -20;//-decisions[0]*10;
 	sumCounter ++;
