@@ -17,7 +17,7 @@ window.Physijs = (function() {
 		_temp_matrix4_1 = new THREE.Matrix4,
 		_quaternion_1 = new THREE.Quaternion,
 
-	// constants
+		// constants
 		MESSAGE_TYPES = {
 			WORLDREPORT: 0,
 			COLLISIONREPORT: 1,
@@ -1000,6 +1000,13 @@ window.Physijs = (function() {
 	Physijs.Mesh.prototype.applyImpulse = function ( force, offset ) {
 		if ( this.world ) {
 			this.world.execute( 'applyImpulse', { id: this._physijs.id, impulse_x: force.x, impulse_y: force.y, impulse_z: force.z, x: offset.x, y: offset.y, z: offset.z } );
+		}
+	};
+
+	// Physijs.Mesh.applyTorque
+	Physijs.Mesh.prototype.applyTorque = function ( force ) {
+		if ( this.world ) {
+			this.world.execute( 'applyTorque', { id: this._physijs.id, torque_x: force.x, torque_y: force.y, torque_z: force.z } );
 		}
 	};
 

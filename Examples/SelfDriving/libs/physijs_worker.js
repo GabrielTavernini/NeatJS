@@ -2,7 +2,7 @@
 var
 	transferableMessage = self.webkitPostMessage || self.postMessage,
 
-// enum
+	// enum
 	MESSAGE_TYPES = {
 		WORLDREPORT: 0,
 		COLLISIONREPORT: 1,
@@ -10,12 +10,12 @@ var
 		CONSTRAINTREPORT: 3
 	},
 
-// temp variables
+	// temp variables
 	_object,
 	_vector,
 	_transform,
 
-// functions
+	// functions
 	public_functions = {},
 	getShapeFromCache,
 	setShapeCache,
@@ -25,7 +25,7 @@ var
 	reportCollisions,
 	reportConstraints,
 
-// world variables
+	// world variables
 	fixedTimeStep, // used when calling stepSimulation
 	rateLimit, // sets whether or not to sync the simulation rate with fixedTimeStep
 	last_simulation_time,
@@ -36,7 +36,7 @@ var
 	_vec3_2,
 	_vec3_3,
 	_quat,
-// private cache
+	// private cache
 	_objects = {},
 	_vehicles = {},
 	_constraints = {},
@@ -47,18 +47,18 @@ var
 	_num_constraints = 0,
 	_object_shapes = {},
 
-// The following objects are to track objects that ammo.js doesn't clean
-// up. All are cleaned up when they're corresponding body is destroyed.
-// Unfortunately, it's very difficult to get at these objects from the
-// body, so we have to track them ourselves.
+	// The following objects are to track objects that ammo.js doesn't clean
+	// up. All are cleaned up when they're corresponding body is destroyed.
+	// Unfortunately, it's very difficult to get at these objects from the
+	// body, so we have to track them ourselves.
 	_motion_states = {},
-// Don't need to worry about it for cached shapes.
-	_noncached_shapes = {},
-// A body with a compound shape always has a regular shape as well, so we
-// have track them separately.
-	_compound_shapes = {},
+	// Don't need to worry about it for cached shapes.
+    _noncached_shapes = {},
+	// A body with a compound shape always has a regular shape as well, so we
+	// have track them separately.
+    _compound_shapes = {},
 
-// object reporting
+	// object reporting
 	REPORT_CHUNKSIZE, // report array is increased in increments of this chunk size
 
 	WORLDREPORT_ITEMSIZE = 14, // how many float values each reported item needs
@@ -211,16 +211,16 @@ createShape = function( description ) {
 			}
 
 			shape = new Ammo.btHeightfieldTerrainShape(
-				description.xpts,
-				description.ypts,
-				ptr,
-				1,
-				-description.absMaxHeight,
-				description.absMaxHeight,
-				2,
-				0,
-				false
-			);
+					description.xpts,
+					description.ypts,
+					ptr,
+					1,
+					-description.absMaxHeight,
+					description.absMaxHeight,
+					2,
+					0,
+					false
+				);
 
 			_vec3_1.setX(description.xsize/(description.xpts - 1));
 			_vec3_1.setY(description.ysize/(description.ypts - 1));
@@ -327,39 +327,39 @@ public_functions.setGravity = function( description ) {
 public_functions.addObject = function( description ) {
 
 	var i,
-		localInertia, shape, motionState, rbInfo, body;
+	localInertia, shape, motionState, rbInfo, body;
 
-	shape = createShape( description );
-	if (!shape) return
+shape = createShape( description );
+if (!shape) return
 // If there are children then this is a compound shape
-	if ( description.children ) {
-		var compound_shape = new Ammo.btCompoundShape, _child;
-		compound_shape.addChildShape( _transform, shape );
+if ( description.children ) {
+	var compound_shape = new Ammo.btCompoundShape, _child;
+	compound_shape.addChildShape( _transform, shape );
 
-		for ( i = 0; i < description.children.length; i++ ) {
-			_child = description.children[i];
+	for ( i = 0; i < description.children.length; i++ ) {
+		_child = description.children[i];
 
-			var trans = new Ammo.btTransform;
-			trans.setIdentity();
+		var trans = new Ammo.btTransform;
+		trans.setIdentity();
 
-			_vec3_1.setX(_child.position_offset.x);
-			_vec3_1.setY(_child.position_offset.y);
-			_vec3_1.setZ(_child.position_offset.z);
-			trans.setOrigin(_vec3_1);
+		_vec3_1.setX(_child.position_offset.x);
+		_vec3_1.setY(_child.position_offset.y);
+		_vec3_1.setZ(_child.position_offset.z);
+		trans.setOrigin(_vec3_1);
 
-			_quat.setX(_child.rotation.x);
-			_quat.setY(_child.rotation.y);
-			_quat.setZ(_child.rotation.z);
-			_quat.setW(_child.rotation.w);
-			trans.setRotation(_quat);
+		_quat.setX(_child.rotation.x);
+		_quat.setY(_child.rotation.y);
+		_quat.setZ(_child.rotation.z);
+		_quat.setW(_child.rotation.w);
+		trans.setRotation(_quat);
 
-			shape = createShape( description.children[i] );
-			compound_shape.addChildShape( trans, shape );
-			Ammo.destroy(trans);
-		}
+		shape = createShape( description.children[i] );
+		compound_shape.addChildShape( trans, shape );
+		Ammo.destroy(trans);
+	}
 
-		shape = compound_shape;
-		_compound_shapes[ description.id ] = shape;
+	shape = compound_shape;
+    _compound_shapes[ description.id ] = shape;
 	}
 	_vec3_1.setX(0);
 	_vec3_1.setY(0);
@@ -495,13 +495,13 @@ public_functions.removeObject = function( details ) {
 	world.removeRigidBody( _objects[details.id] );
 	Ammo.destroy(_objects[details.id]);
 	Ammo.destroy(_motion_states[details.id]);
-	if (_compound_shapes[details.id]) Ammo.destroy(_compound_shapes[details.id]);
+    if (_compound_shapes[details.id]) Ammo.destroy(_compound_shapes[details.id]);
 	if (_noncached_shapes[details.id]) Ammo.destroy(_noncached_shapes[details.id]);
 	var ptr = _objects[details.id].a != undefined ? _objects[details.id].a : _objects[details.id].ptr;
 	delete _objects_ammo[ptr];
 	delete _objects[details.id];
 	delete _motion_states[details.id];
-	if (_compound_shapes[details.id]) delete _compound_shapes[details.id];
+    if (_compound_shapes[details.id]) delete _compound_shapes[details.id];
 	if (_noncached_shapes[details.id]) delete _noncached_shapes[details.id];
 	_num_objects--;
 };
@@ -572,6 +572,18 @@ public_functions.applyImpulse = function ( details ) {
 	_objects[details.id].activate();
 };
 
+public_functions.applyTorque = function ( details ) {
+
+	_vec3_1.setX(details.torque_x);
+	_vec3_1.setY(details.torque_y);
+	_vec3_1.setZ(details.torque_z);
+
+	_objects[details.id].applyTorque(
+		_vec3_1
+	);
+	_objects[details.id].activate();
+};
+
 public_functions.applyCentralForce = function ( details ) {
 
 	_vec3_1.setX(details.x);
@@ -584,9 +596,9 @@ public_functions.applyCentralForce = function ( details ) {
 
 public_functions.applyForce = function ( details ) {
 
-	_vec3_1.setX(details.impulse_x);
-	_vec3_1.setY(details.impulse_y);
-	_vec3_1.setZ(details.impulse_z);
+	_vec3_1.setX(details.force_x);
+	_vec3_1.setY(details.force_y);
+	_vec3_1.setZ(details.force_z);
 
 	_vec3_2.setX(details.x);
 	_vec3_2.setY(details.y);
@@ -634,7 +646,7 @@ public_functions.setAngularFactor = function ( details ) {
 	_vec3_1.setZ(details.z);
 
 	_objects[details.id].setAngularFactor(
-		_vec3_1
+			_vec3_1
 	);
 };
 
@@ -960,7 +972,6 @@ public_functions.hinge_enableAngularMotor = function( params ) {
 };
 public_functions.hinge_disableMotor = function( params ) {
 	_constraints[ params.constraint ].enableMotor( false );
-	var constraint = _constraints[ params.constraint ];
 	if ( constraint.getRigidBodyB() ) {
 		constraint.getRigidBodyB().activate();
 	}
@@ -1240,18 +1251,18 @@ reportCollisions = function() {
 		for ( j = 0; j < num_contacts; j++ ) {
 			pt = manifold.getContactPoint( j );
 			//if ( pt.getDistance() < 0 ) {
-			offset = 2 + (collisionreport[1]++) * COLLISIONREPORT_ITEMSIZE;
-			collisionreport[ offset ] = _objects_ammo[ manifold.getBody0() ];
-			collisionreport[ offset + 1 ] = _objects_ammo[ manifold.getBody1() ];
+				offset = 2 + (collisionreport[1]++) * COLLISIONREPORT_ITEMSIZE;
+				collisionreport[ offset ] = _objects_ammo[ manifold.getBody0() ];
+				collisionreport[ offset + 1 ] = _objects_ammo[ manifold.getBody1() ];
 
-			_vector = pt.get_m_normalWorldOnB();
-			collisionreport[ offset + 2 ] = _vector.x();
-			collisionreport[ offset + 3 ] = _vector.y();
-			collisionreport[ offset + 4 ] = _vector.z();
-			break;
+				_vector = pt.get_m_normalWorldOnB();
+				collisionreport[ offset + 2 ] = _vector.x();
+				collisionreport[ offset + 3 ] = _vector.y();
+				collisionreport[ offset + 4 ] = _vector.z();
+				break;
 			//}
 
-			transferableMessage( _objects_ammo );
+				transferableMessage( _objects_ammo );
 
 		}
 	}
@@ -1344,10 +1355,8 @@ reportConstraints = function() {
 		if ( _constraints.hasOwnProperty( index ) ) {
 			constraint = _constraints[index];
 			offset_body = constraint.getRigidBodyA();
-			if (constraint.getFrameOffsetA) {
-				transform = constraint.getFrameOffsetA();
-				origin = transform.getOrigin();
-			}
+			transform = constraint.getFrameOffsetA();
+			origin = transform.getOrigin();
 
 			// add values to report
 			offset = 1 + (i++) * CONSTRAINTREPORT_ITEMSIZE;
