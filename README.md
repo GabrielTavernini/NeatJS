@@ -22,3 +22,7 @@ Applying the NEAT algorithm to a 3D car trying to get along a course, we can cle
 
 #### Atari Asteroids
 A population of 150 spaceships evolving to beat the old Atari Asteroids Game. Spaceships can see the distance to the closest asteroid in 16 directions evenly spaced around them and can move forward, turn right or left and shoot. [Try it!](https://gabrieltavernini.github.io/NeatJS/Examples/Asteroids/)
+
+
+#### Duck Platformer - Made by TranHuy2k2
+AI duck population trying to survive a meteors disaster. Learn with NEAT algorithm, the ducks have to determine the direction to dodge all the meteors from the sky. A duck has two actions to decide: move left or right. From multiple generations, the neural network will be evolved to best adapt to the gameplay. May the best duck survive! [Take a look!](https://github.com/zit-software/zit-neat)
